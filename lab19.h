@@ -3,9 +3,9 @@
 #include<ctime>
 #include<cstdlib>
 #include<iomanip>
-
+ 
 using namespace std;
-
+ 
 class Unit{
 		string name;
 		string type;		
@@ -24,7 +24,7 @@ class Unit{
 		void guard();
 		bool isDead();	
 };
-
+ 
 void Unit::create(string t){ 
 	if(t == "Hero"){
 		type = "Hero";
@@ -43,7 +43,7 @@ void Unit::create(string t){
 	hp = hpmax;
 	guard_on = false;
 }
-
+ 
 void Unit::showStatus(){
 	if(type == "Hero"){
 		cout << "---------------------------------------\n"; 
@@ -58,19 +58,56 @@ void Unit::showStatus(){
 		cout << "\n\t\t\t\t---------------------------------------\n";
 	}
 }
-
+ 
 void Unit::newTurn(){
 	guard_on = false;
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//Write function members isDead(), guard(), heal(), beAttacked(), and attack() here//
-/////////////////////////////////////////////////////////////////////////////////////
-
-
-
+ 
+ 
+bool Unit::isDead(){
+    if(hp > 0){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+ 
+void Unit::guard(){
+    guard_on = true;
+}
+ 
+int Unit::beAttacked(int oppatk){
+    int dmg = 0;
+    if(guard_on == true){
+        dmg = (oppatk-def)/3;
+        hp -= dmg;
+    }
+    else{
+        dmg = oppatk-def;
+        hp -= dmg;
+    }
+    return dmg;
+}
+ 
+int Unit::attack(Unit &name){
+	return name.beAttacked(atk);
+}
+ 
+int Unit::heal(){
+    int h = rand()%21 +10;
+    int lh = hpmax-hp;
+    if(hp == hpmax) return 0;
+    if(hp + h > hpmax){
+        hp += lh;
+        return lh;
+    }else {
+        hp += h;
+        return h;
+    }
+}
+ 
+ 
 void drawScene(char p_action,int p,char m_action,int m){
 	cout << "                                                       \n";
 	if(p_action == 'A'){
@@ -106,8 +143,8 @@ void drawScene(char p_action,int p,char m_action,int m){
 	cout << "                  *   *                                \n";
 	cout << "                                                       \n";
 };
-
-
+ 
+ 
 void playerWin(){	
 	cout << "*******************************************************\n";
 	for(int i = 0; i < 3; i++) cout << "*                                                     *\n";
@@ -115,8 +152,8 @@ void playerWin(){
 	for(int i = 0; i < 3; i++) cout << "*                                                     *\n";
 	cout << "*******************************************************\n";
 };
-
-
+ 
+ 
 void playerLose(){
 	cout << "*******************************************************\n";
 	cout << "*                                                     *\n";
